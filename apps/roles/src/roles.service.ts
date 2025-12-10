@@ -18,19 +18,20 @@ export class RolesService {
    }
 
    async getRoleChildrenById(id: string) {
-       
-         const children = await this.roleRepository.find({
-              where: {
-                 parentId: id,
-                  id: Not(id),
-                },
+
+          const parent = await this.roleRepository.findOne({ where: { id } });
+             if (!parent) {
+             throw new NotFoundException('Role not found');
+            }
+          const children = await this.roleRepository.find({
+            where: { parentId: id },
              });
-         return children;
-       }
+
+           return children;
+        }
 
 
-
-  async getRoleById(id: string) {
+   async getRoleById(id: string) {
          const role = await this.roleRepository.findOne({
                  where: { id },
                 relations: ['parentRole', 'children'],
@@ -60,22 +61,21 @@ export class RolesService {
       
     }
         
-    async deleteRole(id: string){
-        const role = await this.roleRepository.findOne({
-            where: { id }
-        });
-    
-        if (!role) {
-            throw new NotFoundException('Role not found');
-        }
-       if (role.children.length > 0){
-        role.children.forEach((role)=> this.roleRepository.update(role.id,{parentId:role.parentId}))
-        this.roleRepository.delete(id)
-        return { message: 'Role removed successfully' };
-       }
-       this.roleRepository.delete(id)
-       return { message: 'Role removed successfully' }
+    async deleteRole(id: string) {
+       const role = await this.roleRepository.findOne({
+             where: { id },});
 
+      if (!role) {
+        throw new NotFoundException('Role not found');
+        }
+          await this.roleRepository.createQueryBuilder()
+          .update(Role)
+          .set({ parentId: role.parentId as any || null })
+          .where("parentId = :id", { id })
+          .execute();
+
+     await this.roleRepository.delete(id);
+     return { message: 'Role removed successfully' };
    }
 
 
