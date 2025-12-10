@@ -1,8 +1,23 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/nestjs-hierarchy-api/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/nestjs-hierarchy-api/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/nestjs-hierarchy-api",
+  "projects": {
+    "roles": {
+      "type": "application",
+      "root": "apps/roles",
+      "entryFile": "main",
+      "sourceRoot": "apps/roles/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/roles/tsconfig.app.json"
+      }
+    }
   }
 }
