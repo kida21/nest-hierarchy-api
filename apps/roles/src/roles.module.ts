@@ -3,28 +3,33 @@ import { RolesController } from './roles.controller';
 import { RolesService } from './roles.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Role } from 'apps/entities/role.entity';
+import { Role } from 'apps/roles/entities/role.entity';
 
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forRootAsync({
-      imports:[ConfigModule],
-      useFactory:(configService : ConfigService) => ({
-        type:'postgres',
-        host:configService.get<string>('HOST'),
-        port:configService.get<number>('PORT'),
-        database:configService.get<string>('POSTGRES_DB'),
-        username:configService.get<string>('POSTGRES_USER'),
-        password:configService.get<string>('POSTGRES)PASSWORD'),
-        entities:[Role],
-        synchronize:true
-        
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('HOST'),
+        port: configService.get<number>('PORT'),
+        database: configService.get<string>('POSTGRES_DB'),
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        entities: [Role],
+        synchronize: true,
       }),
-      inject:[ConfigService]
-    })
+    }),
+
+    
+    TypeOrmModule.forFeature([Role]),
   ],
   controllers: [RolesController],
   providers: [RolesService],
 })
 export class RolesModule {}
+
+
