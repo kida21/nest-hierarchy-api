@@ -14,9 +14,9 @@ import { Role } from 'apps/entities/role.entity';
         type:'postgres',
         host:configService.get<string>('HOST'),
         port:configService.get<number>('PORT'),
-        database:configService.get<string>('DATABASE'),
-        username:configService.get<string>('USERNAME'),
-        password:configService.get<string>('PASSWORD'),
+        database:configService.get<string>('POSTGRES_DB'),
+        username:configService.get<string>('POSTGRES_USER'),
+        password:configService.get<string>('POSTGRES)PASSWORD'),
         entities:[Role],
         synchronize:true
         

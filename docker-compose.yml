@@ -1,0 +1,22 @@
+services:
+  roles:
+    container_name: roles
+    build:
+      context: .
+      dockerfile: ./apps/roles/Dockerfile
+      target: development
+    command: npm run start:dev roles
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./.env
+    
