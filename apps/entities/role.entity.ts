@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Role{
@@ -8,9 +8,12 @@ export class Role{
  name:string
  @Column('text')
  description:string
- @ManyToOne(()=>Role,role => role.children)
+ @Column({nullable:true})
+ parentId: string
+@ManyToOne(()=>Role,(role) => role.children,{nullable:true})
+ @JoinColumn({name:"parentId"})
  parentRole : Role
- @OneToMany(()=>Role,role=>role.parentRole)
+ @OneToMany(()=>Role,(role)=>role.parentRole)
  children : Role[]
  
 }
