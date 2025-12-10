@@ -17,6 +17,27 @@ export class RolesService {
       return await this.roleRepository.find()
    }
 
+    async getRoleHierarchy(){
+      const allRoles = this.roleRepository.find()
+      const roleMap = new Map<string | null,Role[]>();
+      (await allRoles).forEach((role)=>{
+        const parentKey = role.parentId ?? null
+        if (!roleMap.has(parentKey)) roleMap.set(parentKey,[])
+          roleMap.get(parentKey)?.push(role)
+      })
+
+      const BuildTree = (parentId:string | null)=>{
+        const roles = roleMap.get(parentId) || []
+        return roles.map((role)=>({
+          id:role.id,
+          name:role.name,
+          description:role.description,
+          children:BuildTree(role.id)
+        }))
+      }
+      return BuildTree(null)
+    }
+
    async getRoleChildrenById(id: string) {
 
           const parent = await this.roleRepository.findOne({ where: { id } });

@@ -15,11 +15,17 @@ export class RolesController {
   async getAllRoles(){
      return await this.rolesService.getAllRoles()
   }
+  @Get('hierarchy')
+   getRoleHierarchy(){
+    return this.rolesService.getRoleHierarchy()
+   }
 
   @Get(':id')
   async getRoleById(@Param('id') id:string){
     return await this.rolesService.getRoleById(id)
   }
+   
+
 
   @Get(':id/children')
   async getRoleChildrenById(@Param('id') id:string){
