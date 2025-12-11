@@ -14,7 +14,11 @@ export class RolesService {
    }
 
    async getAllRoles(){
-      return await this.roleRepository.find()
+      return await this.roleRepository.find({
+        select:{
+          name: true
+        }
+      })
    }
 
     async getRoleHierarchy(){
@@ -56,6 +60,7 @@ export class RolesService {
          const role = await this.roleRepository.findOne({
                  where: { id },
                 relations: ['parentRole', 'children'],
+
              });
        if (!role) {
          throw new NotFoundException('Role not found');

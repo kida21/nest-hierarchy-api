@@ -11,5 +11,5 @@ export class CreateRoleDto {
 
     @IsOptional()
     @IsString()
-    parentId?:string
+    parentId:string
 }

@@ -4,8 +4,10 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 export class Role{
  @PrimaryGeneratedColumn('uuid')
  id:string
+
  @Column('varchar')
  name:string
+ 
  @Column('text')
  description:string
  @Column({nullable:true})
