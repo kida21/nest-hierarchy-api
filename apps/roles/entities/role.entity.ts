@@ -10,11 +10,14 @@ export class Role{
  
  @Column('text')
  description:string
+
  @Column({nullable:true})
  parentId: string
+
 @ManyToOne(()=>Role,(role) => role.children,{nullable:true})
  @JoinColumn({name:"parentId"})
  parentRole : Role
+ 
  @OneToMany(()=>Role,(role)=>role.parentRole)
  children : Role[]
  
