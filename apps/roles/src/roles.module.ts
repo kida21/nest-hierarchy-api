@@ -20,7 +20,7 @@ import { Role } from 'apps/roles/entities/role.entity';
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         entities: [Role],
-        synchronize: true,
+        synchronize: false,
       }),
     }),
 
