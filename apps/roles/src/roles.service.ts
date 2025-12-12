@@ -71,20 +71,16 @@ export class RolesService {
     
    
    async UpdateRole(id:string,input:{name?:string,description?:string,parentId?:string}){
-       const role = this.roleRepository.findOne({where:{id}})
-       const parentRole = this.roleRepository.findOne({where:{id:input.parentId}})
-       if (!role){
-         throw new NotFoundException('role with this id not found')
-       }
-       if(!parentRole){
-         throw new NotFoundException('parent role not found')
-       }
 
-       if(input.parentId && input.parentId === id){
-         throw new BadRequestException('Role can not be a parent for itself')
+      if (input.parentId === id) {
+         throw new BadRequestException("A role cannot be its own parent");
        }
-      return await this.roleRepository.update(id,input)
-      
+       return await this.roleRepository.update(id, {
+             name: input.name,
+            description: input.description,
+            parentId: input.parentId,
+          });
+
     }
         
     async deleteRole(id: string) {
