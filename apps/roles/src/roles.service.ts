@@ -43,17 +43,14 @@ export class RolesService {
     }
 
    async getRoleChildrenById(id: string) {
-
-          const parent = await this.roleRepository.findOne({ where: { id } });
-             if (!parent) {
-             throw new NotFoundException('Role not found');
-            }
-          const children = await this.roleRepository.find({
-            where: { parentId: id },
+        const role = await this.roleRepository.findOne({
+             where: { id },
+             relations: ['children'],
              });
 
-           return children;
-        }
+          return role?.children || [];
+       }
+
 
 
    async getRoleById(id: string) {
