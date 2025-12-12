@@ -1,8 +1,8 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException,Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateRoleDto } from 'apps/roles/dto/create-role-dto';
 import { Role } from 'apps/roles/entities/role.entity';
-import { IsNull, Not, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RolesService {
@@ -57,9 +57,8 @@ export class RolesService {
          const role = await this.roleRepository.findOne({
                  where: { id },
                 relations: ['parentRole', 'children'],
-
              });
-       if (!role) {
+       if(!role) {
          throw new NotFoundException('Role not found');
          }
        return role;
