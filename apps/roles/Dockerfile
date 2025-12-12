@@ -1,10 +1,8 @@
-FROM node:alpine As development
+FROM node:alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package.json ./
-
-COPY package-lock.json ./
+COPY package*.json ./
 
 RUN npm install
 
@@ -12,18 +10,5 @@ COPY . .
 
 RUN npm run build
 
-FROM node:alpine As production
 
-ARG NODE_ENV=production
-
-ENV NODE_ENV=${NODE_ENV}
-
-COPY package.json ./
-
-COPY package-lock.json ./
-
-RUN npm install --prod
-
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD [ "node","dist/apps/roles/main" ]
+CMD ["sh", "-c", "npm run typeorm:run-migrations && npm run start:dev"] 
