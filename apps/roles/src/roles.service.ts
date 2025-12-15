@@ -16,7 +16,9 @@ export class RolesService {
    async getAllRoles(){
       return await this.roleRepository.find({
         select:{
-          name: true
+          name: true,
+          id:true,
+          parentId:true
         }
       })
    }
