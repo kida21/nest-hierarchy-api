@@ -4,6 +4,10 @@ import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user-dto';
 import * as bcrypt from 'bcryptjs'
+import { Response } from 'express';
+import { TokenPayload } from '../interfaces/Token-Payload-interface';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 
 
@@ -11,6 +15,8 @@ import * as bcrypt from 'bcryptjs'
 export class UserService {
   constructor(@InjectRepository(User) 
   private readonly userRepository:Repository<User>,
+  private readonly configService : ConfigService,
+  private readonly jwtService : JwtService
   
 ){}
 
@@ -33,6 +39,23 @@ export class UserService {
      return user
   }
  
+  async login(user:User,response:Response){
+     const tokenPayload:TokenPayload = {
+       userId:user.id.toString(),
+       role:user.role
+      }
+      const expires = new Date()
+      expires.setSeconds(
+        expires.getSeconds() + this.configService.get('JWT_EXPIRES_IN')
+      )
+
+      const token = this.jwtService.sign(tokenPayload)
+      response.cookie('Authentication',token,{
+        expires,
+        secure:false,
+        httpOnly:true
+      })
   
+    } 
 
 }
