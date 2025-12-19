@@ -58,4 +58,8 @@ export class UserService {
   
     } 
 
+    async getUser(id:string){
+       this.userRepository.findOne({where:{id}})
+    }
+
 }
