@@ -5,9 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user-dto';
 import * as bcrypt from 'bcryptjs'
 
+
+
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository:Repository<User>){}
+  constructor(@InjectRepository(User) 
+  private readonly userRepository:Repository<User>,
+  
+){}
 
   async createUser(userDto:CreateUserDto){
     return this.userRepository.create({
@@ -27,4 +32,7 @@ export class UserService {
      }
      return user
   }
+ 
+  
+
 }
