@@ -18,7 +18,8 @@ public async up(queryRunner: QueryRunner): Promise<void> {
           {
             name: "name",
             type: "varchar",
-            isNullable: false
+            isNullable: false,
+            isUnique:true
           },
           {
             name: "description",
