@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/roles/Dockerfile
+    container_name: roles
     ports:
       - '3000:3000'
     env_file:
@@ -13,6 +14,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/user/Dockerfile
+    container_name: user
     ports:
       - '3001:3001'
     env_file:

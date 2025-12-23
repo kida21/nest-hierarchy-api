@@ -2,6 +2,7 @@ import { ConfigService } from "@nestjs/config";
 import { Role } from "./apps/roles/entities/role.entity";
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
+import { User } from "apps/user/entities/user.entity";
 
 config()
 
@@ -14,7 +15,7 @@ export default new DataSource({
     username:configService.get('POSTGRES_USER'),
     database:configService.get('POSTGRES_DB'),
     password:configService.get('POSTGRES_PASSWORD'),
-    migrations:['./apps/roles/migrations/**'],
-    entities:[Role]
+    migrations:['./apps/roles/migrations/**','./apps/user/migrations/**'],
+    entities:[Role,User]
 
 })
