@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/roles/Dockerfile
+    command: npm run start:dev roles
     container_name: roles
     ports:
       - '3000:3000'
@@ -14,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/user/Dockerfile
+    command: npm run start:dev user
     container_name: user
     ports:
       - '3001:3001'

@@ -4,6 +4,8 @@ import { RolesService } from './roles.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Role } from 'apps/roles/entities/role.entity';
+import { AUTH_SERVICE} from '@app/common/constants';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 
 @Module({
@@ -23,13 +25,27 @@ import { Role } from 'apps/roles/entities/role.entity';
         synchronize: false,
       }),
     }),
-
-    
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
     TypeOrmModule.forFeature([Role]),
   ],
   controllers: [RolesController],
   providers: [RolesService],
+   
 })
 export class RolesModule {}
+
 
 

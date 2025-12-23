@@ -30,7 +30,7 @@ export class Migrations1766470598368 implements MigrationInterface {
                       name: "role",
                       type: "varchar",
                       isNullable: false,
-                      default:'admin'
+                      default:"'admin'"
                     },
                 ]
             })

@@ -2,7 +2,7 @@ import { ConfigService } from "@nestjs/config";
 import { Role } from "./apps/roles/entities/role.entity";
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import { User } from "apps/user/entities/user.entity";
+import { User } from "./apps/user/entities/user.entity";
 
 config()
 

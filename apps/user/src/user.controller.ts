@@ -8,7 +8,7 @@ import { CreateUserDto } from '../dto/create-user-dto';
 import { JwtGuard } from '../guards/jwt-guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('user')
+@Controller('api/v1/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

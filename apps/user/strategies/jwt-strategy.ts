@@ -1,27 +1,35 @@
-import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { UserService } from "../src/user.service";
-import { TokenPayload } from "../interfaces/Token-Payload-interface";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UserService } from '../src/user.service';
+import { TokenPayload } from '../interfaces/Token-Payload-interface';
 
-export class JwtStrategy extends PassportStrategy(Strategy){
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    configService: ConfigService,
+    private readonly userService: UserService,
+  ) {
+    const secret = configService.get<string>('JWT_SECRET');
 
-    constructor( configService:ConfigService,
-                private readonly userService:UserService
-    ){
-        const secret = configService.get<string>('JWT_SECRET_KEY')
-        if (!secret){
-            throw new Error('JWT_SECRET is not set in environment variables');
-        }
-        super({
-            secretOrKey:secret,
-            jwtFromRequest:ExtractJwt.fromExtractors([
-            (request:any)=>request?.cookies?.Authentication || request.Authentication
-            ])
-        });
+    if (!secret) {
+      throw new Error('JWT_SECRET is not set in environment variables');
     }
-    validate({userId}:TokenPayload){
-      this.userService.getUser(userId)
-    }
-    
+
+    super({
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: any) =>
+          request?.cookies?.Authentication || request?.Authentication,
+      ]),
+      secretOrKey: secret, 
+    });
+  }
+
+  async validate(payload: TokenPayload) {
+    const user = await this.userService.getUser(payload.userId);
+    if (!user) throw new UnauthorizedException();
+    return user;
+  }
 }
+

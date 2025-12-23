@@ -21,10 +21,11 @@ export class UserService {
 ){}
 
   async createUser(userDto:CreateUserDto){
-    return this.userRepository.create({
+    this.userRepository.create({
       ...userDto,
       password: await bcrypt.hash(userDto.password,10)
     })
+    return this.userRepository.save(userDto)
   }
 
   async verifyUser(email:string,password:string){
@@ -59,7 +60,7 @@ export class UserService {
     } 
 
     async getUser(id:string){
-       this.userRepository.findOne({where:{id}})
+       return this.userRepository.findOne({where:{id}})
     }
 
 }
