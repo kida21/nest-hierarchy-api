@@ -9,6 +9,16 @@ services:
       - ./.env
     depends_on:
       - postgres
+  user:
+    build:
+      context: .
+      dockerfile: ./apps/user/Dockerfile
+    ports:
+      - '3001:3001'
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
   postgres:
     container_name: postgres
     image: postgres:17-alpine
