@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { RolesModule } from './roles.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create(RolesModule);
@@ -25,6 +25,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true,
   });
+  app.use(cookieParser())
   await app.listen(port);
 }
 bootstrap();

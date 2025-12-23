@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LocalGuard } from '../guards/local-guard';
 import { CurrentUser } from '../Decorator/current-user-decorator';
@@ -18,13 +18,14 @@ export class UserController {
     @CurrentUser() user : User,
     @Res() response : Response
   ){
+      response.clearCookie('Authentication')
       this.userService.login(user,response)
-     response.send(user)
+      response.send(user)
   }
 
   @Post()
-  async createUser(createDto:CreateUserDto){
-      this.userService.createUser(createDto)
+  async createUser(@Body() createDto:CreateUserDto){
+     return this.userService.createUser(createDto)
   }
 
   @UseGuards(JwtGuard)

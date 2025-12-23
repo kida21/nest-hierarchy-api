@@ -20,16 +20,18 @@ export class UserService {
   
 ){}
 
-  async createUser(userDto:CreateUserDto){
-    this.userRepository.create({
-      ...userDto,
-      password: await bcrypt.hash(userDto.password,10)
-    })
-    return this.userRepository.save(userDto)
-  }
+  async createUser(userDto: CreateUserDto) {
+  const user = this.userRepository.create({
+    ...userDto,
+    password: await bcrypt.hash(userDto.password, 10),
+  });
+
+  return this.userRepository.save(user);
+}
+
 
   async verifyUser(email:string,password:string){
-     const user = await this.userRepository.findOneBy({email})
+     const user = await this.userRepository.findOne({where:{email}})
      if(!user){
       throw new NotFoundException('user not found')
      }
@@ -41,6 +43,7 @@ export class UserService {
   }
  
   async login(user:User,response:Response){
+    
      const tokenPayload:TokenPayload = {
        userId:user.id.toString(),
        role:user.role
@@ -54,7 +57,8 @@ export class UserService {
       response.cookie('Authentication',token,{
         expires,
         secure:false,
-        httpOnly:true
+        httpOnly:true,
+        sameSite:'strict'
       })
   
     } 
