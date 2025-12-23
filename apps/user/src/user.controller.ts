@@ -5,6 +5,8 @@ import { CurrentUser } from '../Decorator/current-user-decorator';
 import { User } from '../entities/user.entity';
 import type { Response } from 'express';
 import { CreateUserDto } from '../dto/create-user-dto';
+import { JwtGuard } from '../guards/jwt-guard';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('user')
 export class UserController {
@@ -25,4 +27,9 @@ export class UserController {
       this.userService.createUser(createDto)
   }
 
+  @UseGuards(JwtGuard)
+  @MessagePattern('authenticate')
+  async authenticate(@Payload() data : any){
+    return data.user
+  }
 }
