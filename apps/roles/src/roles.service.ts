@@ -82,21 +82,14 @@ export class RolesService {
     }
         
     async deleteRole(id: string) {
-       const role = await this.roleRepository.findOne({
-             where: { id },});
+       const result = await this.roleRepository.delete(id);
 
-      if (!role) {
-        throw new NotFoundException('Role not found');
-        }
-          await this.roleRepository.createQueryBuilder()
-          .update(Role)
-          .set({ parentId: role.parentId as any || null })
-          .where("parentId = :id", { id })
-          .execute();
+       if (result.affected === 0) {
+           throw new NotFoundException('Role not found');
+          }
 
-     await this.roleRepository.delete(id);
-     return { message: 'Role removed successfully' };
-   }
+        return { message: 'Role and all child roles deleted successfully' };
+      }
 
 
 }
