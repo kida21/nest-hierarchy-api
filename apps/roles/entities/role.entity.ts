@@ -14,7 +14,7 @@ export class Role{
  @Column({nullable:true})
  parentId: string
 
-@ManyToOne(()=>Role,(role) => role.children,{nullable:true})
+@ManyToOne(()=>Role,(role) => role.children,{nullable:true,onDelete: 'CASCADE'})
  @JoinColumn({name:"parentId"})
  parentRole : Role
  

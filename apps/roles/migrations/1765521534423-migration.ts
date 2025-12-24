@@ -2,10 +2,13 @@ import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm
 
 export class Migration1765521534423 implements MigrationInterface {
 
-public async up(queryRunner: QueryRunner): Promise<void> {
+  private readonly tableName = "role";
+  private readonly fkName = "FK_role_parent";
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "role",
+        name: this.tableName,
         columns: [
           {
             name: "id",
@@ -13,41 +16,42 @@ public async up(queryRunner: QueryRunner): Promise<void> {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: "uuid",
-            default: "uuid_generate_v4()"
+            default: "uuid_generate_v4()",
           },
           {
             name: "name",
             type: "varchar",
             isNullable: false,
-            isUnique:true
+            isUnique: true,
           },
           {
             name: "description",
             type: "text",
-            isNullable: false
+            isNullable: false,
           },
           {
             name: "parentId",
             type: "uuid",
-            isNullable: true
-          }
-        ]
+            isNullable: true,
+          },
+        ],
       })
     );
 
     await queryRunner.createForeignKey(
-      "role",
+      this.tableName,
       new TableForeignKey({
+        name: this.fkName,
         columnNames: ["parentId"],
+        referencedTableName: this.tableName,
         referencedColumnNames: ["id"],
-        referencedTableName: "role",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE", 
       })
     );
   }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-      await queryRunner.dropTable("role");
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey(this.tableName, this.fkName);
+    await queryRunner.dropTable(this.tableName);
   }
-
 }
