@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(UserModule);
   const configService = app.get(ConfigService)
   const port = configService.get<string>('USER_HTTP_PORT')
+  const url = configService.get('URL')
   if (!port){
     throw new Error('failed to load Port from .env')
   }
@@ -18,7 +19,11 @@ async function bootstrap() {
       port:configService.get('TCP_PORT')
     }
   })
-  
+  app.enableCors({
+    origin: url, 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
+    credentials: true,
+  });
   app.startAllMicroservices()
   await app.listen(port);
 }
