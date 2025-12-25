@@ -28,6 +28,14 @@ export class UserController {
      return this.userService.createUser(createDto)
   }
 
+ 
+  @UseGuards(JwtGuard)
+  @Get('me')
+  getMe(@CurrentUser() user: User) {
+  return this.userService.getUser(user.id)
+   }
+
+
   @UseGuards(JwtGuard)
   @MessagePattern('authenticate')
   async authenticate(@Payload() data : any){

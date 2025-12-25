@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
 import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
-
+import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create(UserModule);
@@ -24,6 +24,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true,
   });
+  app.use(cookieParser())
   app.startAllMicroservices()
   await app.listen(port);
 }

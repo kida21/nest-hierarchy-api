@@ -58,7 +58,8 @@ export class UserService {
         expires,
         secure:false,
         httpOnly:true,
-        sameSite:'strict'
+        sameSite:'lax',
+        path:'/'
       })
   
     } 
