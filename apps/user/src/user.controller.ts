@@ -23,6 +23,14 @@ export class UserController {
       response.send(user)
   }
 
+  @UseGuards(JwtGuard)
+  @Post('logout')
+  async logout(@Res() response:Response){
+     response.clearCookie('Authentication')
+     return response.send({message:'Logged out successfully'})
+  }
+
+  @UseGuards(JwtGuard)
   @Post()
   async createUser(@Body() createDto:CreateUserDto){
      return this.userService.createUser(createDto)
