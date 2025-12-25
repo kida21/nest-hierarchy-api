@@ -1,16 +1,29 @@
-import { BadRequestException,Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException,ConflictException,Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateRoleDto } from 'apps/roles/dto/create-role-dto';
 import { Role } from 'apps/roles/entities/role.entity';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 
 @Injectable()
 export class RolesService {
    constructor(@InjectRepository(Role) private readonly roleRepository : Repository<Role>){}
 
   
-   async create(createRoleDto:CreateRoleDto){
-      return this.roleRepository.save(createRoleDto)
+   async create(createRoleDto: CreateRoleDto) {
+      try {
+         return await this.roleRepository.save(createRoleDto);
+      }catch (error) {
+        if (
+            error instanceof QueryFailedError &&
+            (error as any).code === '23505' 
+          ) {
+
+        throw new ConflictException(
+        `Role with name "${createRoleDto.name}" already exists`
+        );
+       }
+    throw error;
+    }
    }
 
    async getAllRoles(){

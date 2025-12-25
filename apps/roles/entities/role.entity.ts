@@ -5,8 +5,8 @@ export class Role{
  @PrimaryGeneratedColumn('uuid')
  id:string
 
- @Column('varchar',{unique:true})
- name:string
+ @Column({ type: 'citext', unique: true})
+name: string;
  
  @Column('text')
  description:string

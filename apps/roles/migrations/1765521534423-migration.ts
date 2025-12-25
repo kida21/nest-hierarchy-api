@@ -6,6 +6,7 @@ export class Migration1765521534423 implements MigrationInterface {
   private readonly fkName = "FK_role_parent";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS citext`);
     await queryRunner.createTable(
       new Table({
         name: this.tableName,
@@ -20,7 +21,7 @@ export class Migration1765521534423 implements MigrationInterface {
           },
           {
             name: "name",
-            type: "varchar",
+            type: "citext",
             isNullable: false,
             isUnique: true,
           },
