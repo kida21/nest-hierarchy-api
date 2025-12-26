@@ -14,7 +14,7 @@ async function bootstrap() {
   }
   const config = new DocumentBuilder()
     .setTitle('Role Management Api')
-    .setDescription('Api for managing Rolea')
+    .setDescription('Api for managing Role')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
