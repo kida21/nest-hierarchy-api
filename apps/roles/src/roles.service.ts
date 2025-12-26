@@ -86,13 +86,25 @@ export class RolesService {
       if (input.parentId === id) {
          throw new BadRequestException("A role cannot be its own parent");
        }
-       return await this.roleRepository.update(id, {
+       try{
+         return await this.roleRepository.update(id, {
              name: input.name,
             description: input.description,
             parentId: input.parentId,
           });
+       } catch (error) {
+        if (
+            error instanceof QueryFailedError &&
+            (error as any).code === '23505' 
+          ) {
 
-    }
+        throw new ConflictException(
+        `Role with name "${input.name}" already exists`
+        );
+       }
+        throw error;
+      }
+   }
         
     async deleteRole(id: string) {
        const result = await this.roleRepository.delete(id);

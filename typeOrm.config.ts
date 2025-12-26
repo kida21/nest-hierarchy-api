@@ -16,6 +16,7 @@ export default new DataSource({
     database:configService.get('POSTGRES_DB'),
     password:configService.get('POSTGRES_PASSWORD'),
     migrations:['./apps/roles/migrations/**','./apps/user/migrations/**'],
-    entities:[Role,User]
+    entities:[Role,User],
+    synchronize: false
 
 })
