@@ -10,7 +10,7 @@ async function bootstrap() {
   const port = configService.get<string>('USER_HTTP_PORT')
   const url = configService.get('URL')
   if (!port){
-    throw new Error('failed to load Port from .env file')
+    throw new Error('Failed to load Port from .env file')
   }
   app.connectMicroservice({
     transport:Transport.TCP,
